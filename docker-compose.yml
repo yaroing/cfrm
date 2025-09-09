@@ -1,0 +1,88 @@
+services:
+  # Base de données PostgreSQL
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: cfrm_db
+      POSTGRES_USER: cfrm_user
+      POSTGRES_PASSWORD: cfrm_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backend/sql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - cfrm_network
+
+  # Cache Redis
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - cfrm_network
+
+  # Backend Django
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    environment:
+      - DEBUG=1
+      - DATABASE_URL=postgresql://cfrm_user:cfrm_password@db:5432/cfrm_db
+      - REDIS_URL=redis://redis:6379/0
+      - SECRET_KEY=your-secret-key-here
+      - ALLOWED_HOSTS=localhost,127.0.0.1,frontend
+    volumes:
+      - ./backend:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - redis
+    networks:
+      - cfrm_network
+
+  # Frontend Next.js
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    command: sh -c "npm ci && npm run build && npm start"
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - cfrm_network
+
+  # Worker Celery pour les tâches asynchrones
+  worker:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    command: celery -A cfrm worker -l info
+    environment:
+      - DEBUG=1
+      - DATABASE_URL=postgresql://cfrm_user:cfrm_password@db:5432/cfrm_db
+      - REDIS_URL=redis://redis:6379/0
+      - SECRET_KEY=your-secret-key-here
+    volumes:
+      - ./backend:/app
+    depends_on:
+      - db
+      - redis
+    networks:
+      - cfrm_network
+
+volumes:
+  postgres_data:
+
+networks:
+  cfrm_network:
+    driver: bridge

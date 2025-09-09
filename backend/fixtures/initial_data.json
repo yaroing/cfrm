@@ -1,0 +1,254 @@
+[
+  {
+    "model": "users.organization",
+    "pk": 1,
+    "fields": {
+      "name": "CFRM Platform",
+      "code": "CFRM",
+      "description": "Plateforme de feedback communautaire",
+      "contact_email": "admin@cfrm.org",
+      "contact_phone": "+1234567890",
+      "address": "123 Rue de la Paix, 75001 Paris, France",
+      "is_active": true,
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "users.role",
+    "pk": 1,
+    "fields": {
+      "name": "Admin",
+      "description": "Administrateur système avec tous les droits",
+      "permissions": ["all"],
+      "is_psea_authorized": true,
+      "can_escalate": true,
+      "can_assign": true,
+      "can_close": true,
+      "can_view_analytics": true,
+      "created_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "users.role",
+    "pk": 2,
+    "fields": {
+      "name": "Manager",
+      "description": "Gestionnaire avec droits étendus",
+      "permissions": ["view_tickets", "edit_tickets", "assign_tickets", "close_tickets", "view_analytics"],
+      "is_psea_authorized": true,
+      "can_escalate": true,
+      "can_assign": true,
+      "can_close": true,
+      "can_view_analytics": true,
+      "created_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "users.role",
+    "pk": 3,
+    "fields": {
+      "name": "Agent",
+      "description": "Agent de traitement des tickets",
+      "permissions": ["view_tickets", "edit_tickets", "create_responses"],
+      "is_psea_authorized": false,
+      "can_escalate": false,
+      "can_assign": false,
+      "can_close": false,
+      "can_view_analytics": false,
+      "created_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "users.role",
+    "pk": 4,
+    "fields": {
+      "name": "PSEA_Focal_Point",
+      "description": "Point focal PSEA",
+      "permissions": ["view_tickets", "edit_tickets", "psea_access", "escalate_tickets"],
+      "is_psea_authorized": true,
+      "can_escalate": true,
+      "can_assign": false,
+      "can_close": false,
+      "can_view_analytics": false,
+      "created_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "tickets.category",
+    "pk": 1,
+    "fields": {
+      "name": "Information",
+      "description": "Demande d'information générale",
+      "is_sensitive": false,
+      "requires_escalation": false,
+      "escalation_contact": "",
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "tickets.category",
+    "pk": 2,
+    "fields": {
+      "name": "Complaint",
+      "description": "Plainte générale",
+      "is_sensitive": false,
+      "requires_escalation": true,
+      "escalation_contact": "complaints@cfrm.org",
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "tickets.category",
+    "pk": 3,
+    "fields": {
+      "name": "PSEA",
+      "description": "Protection contre l'exploitation et les abus sexuels",
+      "is_sensitive": true,
+      "requires_escalation": true,
+      "escalation_contact": "psea@cfrm.org",
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "tickets.priority",
+    "pk": 1,
+    "fields": {
+      "name": "Critique",
+      "level": 5,
+      "color": "#DC2626",
+      "sla_hours": 2,
+      "created_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "tickets.priority",
+    "pk": 2,
+    "fields": {
+      "name": "Élevée",
+      "level": 4,
+      "color": "#EA580C",
+      "sla_hours": 4,
+      "created_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "tickets.priority",
+    "pk": 3,
+    "fields": {
+      "name": "Moyenne",
+      "level": 3,
+      "color": "#D97706",
+      "sla_hours": 24,
+      "created_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "tickets.priority",
+    "pk": 4,
+    "fields": {
+      "name": "Faible",
+      "level": 2,
+      "color": "#16A34A",
+      "sla_hours": 72,
+      "created_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "tickets.status",
+    "pk": 1,
+    "fields": {
+      "name": "Ouvert",
+      "description": "Ticket nouvellement créé",
+      "is_final": false,
+      "color": "#3B82F6",
+      "created_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "tickets.status",
+    "pk": 2,
+    "fields": {
+      "name": "En cours",
+      "description": "Ticket en cours de traitement",
+      "is_final": false,
+      "color": "#F59E0B",
+      "created_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "tickets.status",
+    "pk": 3,
+    "fields": {
+      "name": "Fermé",
+      "description": "Ticket fermé",
+      "is_final": true,
+      "color": "#10B981",
+      "created_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "channels.channelconfiguration",
+    "pk": 1,
+    "fields": {
+      "name": "SMS Twilio",
+      "type": "sms",
+      "is_active": true,
+      "configuration": {
+        "provider": "twilio",
+        "phone_number": "+1234567890"
+      },
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "channels.channelconfiguration",
+    "pk": 2,
+    "fields": {
+      "name": "WhatsApp Business",
+      "type": "whatsapp",
+      "is_active": true,
+      "configuration": {
+        "provider": "whatsapp",
+        "phone_number_id": "123456789"
+      },
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "channels.channelconfiguration",
+    "pk": 3,
+    "fields": {
+      "name": "Email SMTP",
+      "type": "email",
+      "is_active": true,
+      "configuration": {
+        "provider": "smtp",
+        "host": "smtp.gmail.com",
+        "port": 587
+      },
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "channels.channelconfiguration",
+    "pk": 4,
+    "fields": {
+      "name": "Portail Web",
+      "type": "web",
+      "is_active": true,
+      "configuration": {
+        "provider": "web",
+        "url": "https://cfrm.org"
+      },
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    }
+  }
+]
